@@ -1,0 +1,1 @@
+参考https://github.com/ityouknow/spring-boot-examples/tree/master/spring-boot-rabbitmq
