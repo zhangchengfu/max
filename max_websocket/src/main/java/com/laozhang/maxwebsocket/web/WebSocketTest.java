@@ -19,10 +19,10 @@ public class WebSocketTest {
     private static volatile int onlineCount = 0;
 
     //用来存放每个客户端对应的websocketTest对象，适用与同时与每个客户端通信
-    public static CopyOnWriteArraySet<WebSocketTest> webSocketSet = new CopyOnWriteArraySet<>();
+    public static CopyOnWriteArraySet<WebSocketTest> webSocketSet = new CopyOnWriteArraySet();
 
     //若要实现服务端与指定客户端通信的话，可以使用Map来完成，其中key可以为用户标识
-    public static ConcurrentHashMap<Session, Object> websocketMap = new ConcurrentHashMap<>();
+    public static ConcurrentHashMap<Session, Object> websocketMap = new ConcurrentHashMap();
 
     // 与某个客户端的连接会话，通过它实现定向推送（只推送给某个用户）
     private Session session;

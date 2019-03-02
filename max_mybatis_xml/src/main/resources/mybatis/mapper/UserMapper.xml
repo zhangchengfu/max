@@ -26,7 +26,8 @@
         WHERE id = #{id}
     </select>
 
-    <insert id="insert" parameterType="com.laozhang.max_mybatis_xml.entity.UserEntity" >
+    <insert id="insert" parameterType="com.laozhang.max_mybatis_xml.entity.UserEntity"
+        useGeneratedKeys="true" keyProperty="id" keyColumn="id">
        INSERT INTO
        		users
        		(userName,passWord,user_sex)
