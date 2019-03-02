@@ -27,8 +27,18 @@
     </select>
 
     <!-- 获取主键：useGeneratedKeys="true" keyProperty="id" keyColumn="id" -->
-    <insert id="insert" parameterType="com.laozhang.max_mybatis_xml.entity.UserEntity"
+    <!--<insert id="insert" parameterType="com.laozhang.max_mybatis_xml.entity.UserEntity"
         useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+       INSERT INTO
+       		users
+       		(userName,passWord,user_sex)
+       	VALUES
+       		(#{userName}, #{passWord}, #{userSex})
+    </insert>-->
+    <insert id="insert" parameterType="com.laozhang.max_mybatis_xml.entity.UserEntity">
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+            select  LAST_INSERT_ID() as id
+        </selectKey>
        INSERT INTO
        		users
        		(userName,passWord,user_sex)
