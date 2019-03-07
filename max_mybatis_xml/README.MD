@@ -22,3 +22,9 @@ nsert元素 属性详解　　　　　　　　　　　　　　　　　　�
 <insert id="add" parameterType="EStudent" useGeneratedKeys="true" keyProperty="id">
   insert into TStudent(name, age) values(#{name}, #{age})
 </insert>
+
+\n
+mybatis自动生成代码
+
+\n
+mybatis分页
