@@ -10,8 +10,8 @@ http://www.ityouknow.com/springboot/2016/03/06/spring-boot-redis.html   \n
 进入：D:\bigdata\tmp\Redis-3.0 WindowsX64
 redis-server.exe redis.windows.conf
 redis-cli.exe
-
-
+\n
+redis分布式所，利用redis的setnx
 
 
 
