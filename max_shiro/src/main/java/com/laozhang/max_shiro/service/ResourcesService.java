@@ -1,0 +1,17 @@
+package com.laozhang.max_shiro.service;
+
+import com.github.pagehelper.PageInfo;
+import com.laozhang.max_shiro.entity.Resources;
+
+import java.util.List;
+import java.util.Map;
+
+public interface ResourcesService extends IService<Resources> {
+    PageInfo<Resources> selectByPage(Resources resources, int start, int length);
+
+    public List<Resources> queryAll();
+
+    public List<Resources> loadUserResources(Map<String,Object> map);
+
+    public List<Resources> queryResourcesListWithSelected(Integer rid);
+}
