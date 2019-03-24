@@ -1,0 +1,42 @@
+
+server:
+  port: 9080  # 如果打成war包放入外部tomcat，则此端口配置不生效，以外部tomcat的端口号为准
+
+#数据源配置
+spring:
+  datasource:
+    data-username: dbSource
+    url: jdbc:mysql://127.0.0.1:3306/test?useSSL=false
+    username: root
+    password: taobang
+    #使用druid数据源
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.jdbc.Driver
+    druid:
+      max-active: 20
+      max-wait: 60000
+      min-idle: 1
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 30000
+      validation-query: select 'x'
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      pool-prepared-statements: true
+      max-open-prepared-statements: 20
+
+#Mybtais 相关配置
+mybatis:
+  mapper-locations:
+  - classpath:mapper/*.xml
+  #type-aliases-package: com.laozhang.max_oauth2_client
+
+oauth2:
+  clientId: f3ed0d90-3fc8-4eba-b83c-a0cfe54c174d
+  clientSecret: 78e238b4-c199-49ad-b619-69b6a78959d8
+  redirectUrl: http://localhost:9080/oauth2-login
+  accessTokenUrl: http://localhost:8080/accessToken
+  userInfoUrl: http://localhost:8080/userInfo
+  authorizeUrl: http://localhost:8080/authorize
+
+
