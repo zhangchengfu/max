@@ -21,8 +21,8 @@ public class MaxMybatisMapperApplicationTests {
     public void contextLoads() {
     }
 
-    @Autowired
-    private UserService userService;
+//    @Autowired
+//    private UserService userService;
 
     @Test
     public void testUserService() {
@@ -60,13 +60,13 @@ public class MaxMybatisMapperApplicationTests {
 //		user.setId(23);
 //		this.userService.delete(user);
 
-        PageHelper.startPage(2, 3);
-        List<User> list = userService.selectAll();
-        PageInfo<User> pageInfo = new PageInfo<User>(list);
-        List<User> result = pageInfo.getList();
-        for (User u : result) {
-            System.out.println(u.getUsername());
-        }
+//        PageHelper.startPage(2, 3);
+//        List<User> list = userService.selectAll();
+//        PageInfo<User> pageInfo = new PageInfo<User>(list);
+//        List<User> result = pageInfo.getList();
+//        for (User u : result) {
+//            System.out.println(u.getUsername());
+//        }
     }
 
 }

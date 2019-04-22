@@ -12,6 +12,7 @@
     <artifactId>max_mybatis_mapper</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>max_mybatis_mapper</name>
+    <packaging>jar</packaging>
     <description>MyBatis通用Mapper和PageHelper</description>
 
     <properties>
@@ -52,7 +53,7 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid-spring-boot-starter</artifactId>
-            <version>1.1.6</version>
+            <version>1.1.10</version>
         </dependency>
 
         <dependency>
@@ -67,6 +68,9 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>com.laozhang.max_mybatis_mapper.MaxMybatisMapperApplication</mainClass>
+                </configuration>
             </plugin>
 
             <plugin>
