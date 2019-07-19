@@ -24,13 +24,13 @@ public class UserController {
 
     @GetMapping("/getUsers")
     public List<UserEntity> getUsers() {
-        List<UserEntity> users=userMapper.getAll();
+        List<UserEntity> users = userMapper.getAll();
         return users;
     }
 
     @GetMapping("/getUser")
     public UserEntity getUser(Long id) {
-        UserEntity user=userMapper.getOne(id);
+        UserEntity user = userMapper.getOne(id);
         return user;
     }
 
@@ -39,18 +39,19 @@ public class UserController {
         userMapper.insert(user);
     }
 
-    @PutMapping(value="update")
+    @PutMapping(value = "update")
     public void update(UserEntity user) {
         userMapper.update(user);
     }
 
-    @DeleteMapping(value="/delete/{id}")
+    @DeleteMapping(value = "/delete/{id}")
     public void delete(@PathVariable("id") Long id) {
         userMapper.delete(id);
     }
 
     /**
      * 分页
+     *
      * @return
      */
     @GetMapping("/page")
@@ -58,7 +59,7 @@ public class UserController {
     public PageInfo page() {
         int page = 0;
         int pageSize = 10;
-        PageHelper.startPage(page,pageSize);
+        PageHelper.startPage(page, pageSize);
         SysUserCriteria criteria = new SysUserCriteria();
         List<SysUser> list = sysUserMapper.selectByExample(criteria);
         PageInfo<SysUser> info = new PageInfo<>(list);

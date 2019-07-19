@@ -16,6 +16,6 @@ public class FeignController {
 
     @GetMapping("/feign")
     public String feign() {
-        return feignService.add(1,2);
+        return feignService.add(1, 2);
     }
 }

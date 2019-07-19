@@ -28,7 +28,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public PageInfo<User> selectByPage(User user, int start, int length) {
-        int page = start/length+1;
+        int page = start / length + 1;
         UserCriteria userCriteria = new UserCriteria();
         UserCriteria.Criteria criteria = userCriteria.createCriteria();
         if (!StringUtils.isEmpty(user.getUsername())) {

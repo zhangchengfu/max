@@ -14,7 +14,7 @@ public class User {
     private String salt;
 
     /**
-     * 鏄惁鍚敤
+     * 是否启用
      */
     private Integer enable;
 
@@ -75,18 +75,18 @@ public class User {
     }
 
     /**
-     * 鑾峰彇鏄惁鍚敤
+     * 获取是否启用
      *
-     * @return enable - 鏄惁鍚敤
+     * @return enable - 是否启用
      */
     public Integer getEnable() {
         return enable;
     }
 
     /**
-     * 璁剧疆鏄惁鍚敤
+     * 设置是否启用
      *
-     * @param enable 鏄惁鍚敤
+     * @param enable 是否启用
      */
     public void setEnable(Integer enable) {
         this.enable = enable;

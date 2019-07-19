@@ -9,7 +9,7 @@ import java.util.LinkedList;
 
 public class DbPool {
     private static int link_count = 10;//连接数
-    private  static LinkedList<Connection> pool = new LinkedList<Connection>();// 连接池 （存放所有的初始化连接）
+    private static LinkedList<Connection> pool = new LinkedList<Connection>();// 连接池 （存放所有的初始化连接）
 
     // 初始化连接放入连接池
     static {
@@ -73,7 +73,6 @@ public class DbPool {
     public void releaseConnection(Connection connection) {
         pool.addLast(connection);
     }
-
 
 
 }

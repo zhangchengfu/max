@@ -19,9 +19,9 @@ import javax.servlet.http.HttpServletRequest;
 @EnableSwagger2
 public class HomeController {
 
-    @RequestMapping({"/","/index"})
-    public String index(){
-        return"/index";
+    @RequestMapping({"/", "/index"})
+    public String index() {
+        return "/index";
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
@@ -36,12 +36,12 @@ public class HomeController {
             return "login";
         }
         Subject subject = SecurityUtils.getSubject();
-        UsernamePasswordToken token = new UsernamePasswordToken(user.getUsername(),user.getPassword());
+        UsernamePasswordToken token = new UsernamePasswordToken(user.getUsername(), user.getPassword());
         try {
             subject.login(token);
             //return "redirect:usersPage";
             return "index";
-        }catch (LockedAccountException lae) {
+        } catch (LockedAccountException lae) {
             token.clear();
             request.setAttribute("msg", "用户已经被锁定不能登录，请与管理员联系！");
             return "login";
@@ -52,23 +52,23 @@ public class HomeController {
         }
     }
 
-    @RequestMapping(value={"/usersPage",""})
-    public String usersPage(){
+    @RequestMapping(value = {"/usersPage", ""})
+    public String usersPage() {
         return "user/users";
     }
 
     @RequestMapping("/rolesPage")
-    public String rolesPage(){
+    public String rolesPage() {
         return "role/roles";
     }
 
     @RequestMapping("/resourcesPage")
-    public String resourcesPage(){
+    public String resourcesPage() {
         return "resources/resources";
     }
 
     @RequestMapping("/403")
-    public String forbidden(){
+    public String forbidden() {
         return "403";
     }
 }

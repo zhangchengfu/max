@@ -48,7 +48,7 @@ public class ShiroClientConfig {
     @Value("oauth2.authorizeUrl")
     private String authorizeUrl;
 
-    @Bean(name="oAuth2Realm")
+    @Bean(name = "oAuth2Realm")
     public OAuth2Realm getUserAuthcRealm() {
         OAuth2Realm oAuth2Realm = new OAuth2Realm();
         oAuth2Realm.setCachingEnabled(true);
@@ -71,31 +71,32 @@ public class ShiroClientConfig {
         oAuth2AuthenticationFilter.setAuthcCodeParam(OAuth.OAUTH_CODE);
         oAuth2AuthenticationFilter.setResponseType(OAuth.OAUTH_CODE);
         oAuth2AuthenticationFilter.setFailureUrl("/oauth2Failure");
-        filters.put("oauth2Authc",oAuth2AuthenticationFilter);
+        filters.put("oauth2Authc", oAuth2AuthenticationFilter);
         return filters;
     }
 
-    @Bean(name="shiroFilter")
+    @Bean(name = "shiroFilter")
     public ShiroFilterFactoryBean createShiroSecurityFilterFactory() {
         ShiroFilterFactoryBean shiroFilter = new ShiroFilterFactoryBean();
         shiroFilter.setSecurityManager(createSecurityManager());
-        shiroFilter.setLoginUrl(authorizeUrl+"?client_id="+clientId+"&response_type=" + OAuth.OAUTH_CODE +
-                                "&redirect_uri=" + redirectUrl);
+        shiroFilter.setLoginUrl(authorizeUrl + "?client_id=" + clientId + "&response_type=" + OAuth.OAUTH_CODE +
+                "&redirect_uri=" + redirectUrl);
         shiroFilter.setSuccessUrl("/oauth2-login");
         shiroFilter.setFilters(createFilterChainMap());
         shiroFilter.setFilterChainDefinitions(loadFilterChainDefinitions());
         return shiroFilter;
     }
 
-    @Bean(name="securityMananger")
+    @Bean(name = "securityMananger")
     public DefaultWebSecurityManager createSecurityManager() {
         DefaultWebSecurityManager securityMananger = new DefaultWebSecurityManager();
         securityMananger.setRealm(getUserAuthcRealm());
         securityMananger.setCacheManager(createEhcacheManager());
-       // securityMananger.setRememberMeManager(createCookieRemmberMananger());
+        // securityMananger.setRememberMeManager(createCookieRemmberMananger());
         return securityMananger;
     }
-    @Bean(name="cacheManager")
+
+    @Bean(name = "cacheManager")
     public EhCacheManager createEhcacheManager() {
         EhCacheManager cacheManager = new EhCacheManager();
         String path = "classpath:ehcache.xml";

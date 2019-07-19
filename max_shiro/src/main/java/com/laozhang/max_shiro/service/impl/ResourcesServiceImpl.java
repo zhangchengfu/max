@@ -61,6 +61,6 @@ public class ResourcesServiceImpl implements ResourcesService {
 
     @Override
     public Resources selectById(Object id) {
-        return resourcesMapper.selectByPrimaryKey((Integer)id);
+        return resourcesMapper.selectByPrimaryKey((Integer) id);
     }
 }

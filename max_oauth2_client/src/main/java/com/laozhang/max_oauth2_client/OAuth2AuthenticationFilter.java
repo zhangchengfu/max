@@ -16,7 +16,7 @@ import java.io.IOException;
 
 /**
  * 该 filter 的作用类似于 FormAuthenticationFilter 用于 oauth2 客户端的身份验证控制
- * */
+ */
 @Data
 @Slf4j
 public class OAuth2AuthenticationFilter extends AuthenticatingFilter {
@@ -50,18 +50,18 @@ public class OAuth2AuthenticationFilter extends AuthenticatingFilter {
     protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
         String error = request.getParameter("error");
         String errorDescription = request.getParameter("error_description");
-        if(!StringUtils.isEmpty(error)){
-            log.info("error = "+error+"  errorDesc="+errorDescription);
-            WebUtils.issueRedirect(request,response,failureUrl+"?error="+error+"&error_description="+errorDescription);
+        if (!StringUtils.isEmpty(error)) {
+            log.info("error = " + error + "  errorDesc=" + errorDescription);
+            WebUtils.issueRedirect(request, response, failureUrl + "?error=" + error + "&error_description=" + errorDescription);
             return false;
         }
-        Subject subject = getSubject(request,response);
+        Subject subject = getSubject(request, response);
 
-        log.info("subject.isAuthenticated() == "+subject.isAuthenticated());
-        if(!subject.isAuthenticated()){
-            if(StringUtils.isEmpty(request.getParameter(authcCodeParam))){
+        log.info("subject.isAuthenticated() == " + subject.isAuthenticated());
+        if (!subject.isAuthenticated()) {
+            if (StringUtils.isEmpty(request.getParameter(authcCodeParam))) {
                 // 如果没有身份认证，且没有authCode,则重定向到服务端授权
-                saveRequestAndRedirectToLogin(request,response);
+                saveRequestAndRedirectToLogin(request, response);
                 return false;
             }
         }
@@ -72,23 +72,23 @@ public class OAuth2AuthenticationFilter extends AuthenticatingFilter {
 
     @Override
     protected boolean onLoginFailure(AuthenticationToken token, AuthenticationException e, ServletRequest request, ServletResponse response) {
-        Subject subject = getSubject(request,response);
+        Subject subject = getSubject(request, response);
         log.info("是否验证：subject.isAuthenticated() == " + subject.isAuthenticated());
         log.info("是否记住：subject.isRemembered() == " + subject.isRemembered());
-        if(subject.isAuthenticated() || subject.isRemembered()){
+        if (subject.isAuthenticated() || subject.isRemembered()) {
             // 重定向到成功页面
             try {
                 log.info("重定向到成功页面success。。。。");
-                issueSuccessRedirect(request,response);
+                issueSuccessRedirect(request, response);
             } catch (Exception e1) {
-                log.info("重定向到成功页面异常=",e1);
+                log.info("重定向到成功页面异常=", e1);
             }
-        }else{
+        } else {
             try {
                 log.info("重定向到失败页面failure。。。。");
-                WebUtils.issueRedirect(request,response,failureUrl);
+                WebUtils.issueRedirect(request, response, failureUrl);
             } catch (IOException e1) {
-                log.info("重定向到失败页面异常=",e1);
+                log.info("重定向到失败页面异常=", e1);
             }
         }
         return false;
@@ -96,7 +96,7 @@ public class OAuth2AuthenticationFilter extends AuthenticatingFilter {
 
     @Override
     protected boolean onLoginSuccess(AuthenticationToken token, Subject subject, ServletRequest request, ServletResponse response) throws Exception {
-        WebUtils.issueRedirect(request,response,getSuccessUrl());
+        WebUtils.issueRedirect(request, response, getSuccessUrl());
         return false; // 表示执行链结束
     }
 }

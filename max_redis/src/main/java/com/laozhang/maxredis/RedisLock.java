@@ -20,9 +20,10 @@ public class RedisLock {
 
     /**
      * 分布式所
+     *
      * @param key
      */
-    public  void lock(String key) {
+    public void lock(String key) {
         boolean lock;
         while (true) {
             lock = redisTemplate.opsForValue().setIfAbsent(key + LOCK_SUFFIX, "");
@@ -37,6 +38,7 @@ public class RedisLock {
 
     /**
      * 解除分布式锁
+     *
      * @param key
      */
     public void unlock(String key) {

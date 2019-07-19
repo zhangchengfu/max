@@ -10,6 +10,7 @@ import java.util.Date;
 public class SchedulerTask2 {
 
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+
     @Scheduled(fixedRate = 6000)
     public void currentTime() {
         System.out.println("现在时间：" + dateFormat.format(new Date()));

@@ -2,7 +2,9 @@ package com.laozhang.max_mybatis_xml.mapper;
 
 import com.laozhang.max_mybatis_xml.entity.SysUser;
 import com.laozhang.max_mybatis_xml.entity.SysUserCriteria;
+
 import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 
 public interface SysUserMapper {

@@ -30,6 +30,7 @@ public class BookController {
 
     /**
      * 1,查 id
+     *
      * @param id
      * @return
      */
@@ -40,6 +41,7 @@ public class BookController {
 
     /**
      * 2、查 ++：全文检索（根据整个实体的所有属性，可能结果为0个）
+     *
      * @param q
      * @return
      */
@@ -57,6 +59,7 @@ public class BookController {
 
     /**
      * 3、查 +++：分页、分数、分域（结果一个也不少）
+     *
      * @param page
      * @param size
      * @param q
@@ -65,13 +68,13 @@ public class BookController {
     @GetMapping("/{page}/{size}/{q}")
     public List<Book> searchCity(@PathVariable Integer page, @PathVariable Integer size, @PathVariable String q) {
         //分页参数
-        PageRequest pageRequest = new PageRequest(page,size);
+        PageRequest pageRequest = new PageRequest(page, size);
 
         // 分数，并自动按分排序
         FunctionScoreQueryBuilder functionScoreQueryBuilder = QueryBuilders.functionScoreQuery()
-                .add(QueryBuilders.boolQuery().should(QueryBuilders.matchQuery("name",q)),
+                .add(QueryBuilders.boolQuery().should(QueryBuilders.matchQuery("name", q)),
                         ScoreFunctionBuilders.weightFactorFunction(1000)) // 权重：name 1000分
-                .add(QueryBuilders.boolQuery().should(QueryBuilders.matchQuery("message",q)),
+                .add(QueryBuilders.boolQuery().should(QueryBuilders.matchQuery("message", q)),
                         ScoreFunctionBuilders.weightFactorFunction(100)); // 权重： message 100分
 
         // 分数、分页
@@ -84,6 +87,7 @@ public class BookController {
 
     /**
      * 4、增
+     *
      * @param book
      * @return
      */
@@ -95,6 +99,7 @@ public class BookController {
 
     /**
      * 5、删 id
+     *
      * @return
      */
     @DeleteMapping("/delete/{id}")
@@ -106,11 +111,12 @@ public class BookController {
 
     /**
      * 6、改
+     *
      * @param book
      * @return
      */
     @PutMapping("/update")
-    public Book updateBook(@RequestBody  Book book) {
+    public Book updateBook(@RequestBody Book book) {
         bookDao.save(book);
         return book;
     }

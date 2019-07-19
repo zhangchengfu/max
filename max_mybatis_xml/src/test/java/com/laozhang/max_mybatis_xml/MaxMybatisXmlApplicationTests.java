@@ -29,7 +29,7 @@ public class MaxMybatisXmlApplicationTests {
         entity.setUserName("haha");
         entity.setUserSex(UserSexEnum.MAN);
         userMapper.insert(entity);
-        org.junit.Assert.assertEquals(entity.getId(),null);
+        org.junit.Assert.assertEquals(entity.getId(), null);
     }
 
 }

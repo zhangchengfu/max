@@ -12,7 +12,7 @@ public class RibbonController {
 
     @GetMapping("/ribbon")
     public Object ribbon() {
-        String info = restTemplate.getForObject("http://service-A/add?a=1&b=2",String.class);
+        String info = restTemplate.getForObject("http://service-A/add?a=1&b=2", String.class);
         return info;
     }
 }

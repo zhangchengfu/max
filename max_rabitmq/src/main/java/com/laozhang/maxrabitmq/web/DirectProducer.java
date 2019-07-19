@@ -7,9 +7,10 @@ import java.util.concurrent.TimeoutException;
 
 public class DirectProducer {
     private static final String EXCHANGE_NAME = "direct.exchange";
+
     public void publishMsg(String routingKey, String msg) {
         try {
-            MsgProducer.publishMsg(EXCHANGE_NAME, BuiltinExchangeType.DIRECT,routingKey,msg);
+            MsgProducer.publishMsg(EXCHANGE_NAME, BuiltinExchangeType.DIRECT, routingKey, msg);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (TimeoutException e) {
@@ -19,7 +20,7 @@ public class DirectProducer {
 
     public static void main(String[] args) {
         DirectProducer directProducer = new DirectProducer();
-        String[] routingKey = new String[]{"aaa","bbb"};
+        String[] routingKey = new String[]{"aaa", "bbb"};
         String msg = "hello >>>";
 
         for (int i = 0; i < 30; i++) {

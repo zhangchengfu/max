@@ -26,7 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * 令牌生成
- * */
+ */
 @RestController
 @Slf4j
 public class AccessTokenController {
@@ -36,11 +36,11 @@ public class AccessTokenController {
 
     @RequestMapping("/accessToken")
     public HttpEntity token(HttpServletRequest request) throws OAuthSystemException {
-        try{
+        try {
             // 转为OAuth请求
             OAuthTokenRequest oauthRequest = new OAuthTokenRequest(request);
             //检查提交的客户端ID是否正确
-            if(!oAuthService.checkClientId(oauthRequest.getClientId())){
+            if (!oAuthService.checkClientId(oauthRequest.getClientId())) {
                 log.error("获取accessToken时，客户端ID错误 client=" + oauthRequest.getClientId());
                 OAuthResponse response = OAuthResponse
                         .errorResponse(HttpServletResponse.SC_BAD_REQUEST)
@@ -51,8 +51,8 @@ public class AccessTokenController {
             }
 
             // 检查客户端安全KEY是否正确
-            if(!oAuthService.checkClientSecret(oauthRequest.getClientSecret())){
-                log.error("ClientSecret不合法 client_secret="+oauthRequest.getClientSecret());
+            if (!oAuthService.checkClientSecret(oauthRequest.getClientSecret())) {
+                log.error("ClientSecret不合法 client_secret=" + oauthRequest.getClientSecret());
                 OAuthResponse response = OAuthResponse
                         .errorResponse(HttpServletResponse.SC_UNAUTHORIZED)
                         .setError(OAuthError.TokenResponse.UNAUTHORIZED_CLIENT)
@@ -67,8 +67,8 @@ public class AccessTokenController {
              * 此处只校验 AUTHORIZATION_CODE 类型，其他的还有PASSWORD 、REFRESH_TOKEN 和 CLIENT_CREDENTIALS
              * 具体查看 {@link GrantType}
              * */
-            if(oauthRequest.getParam(OAuth.OAUTH_GRANT_TYPE).equals(GrantType.AUTHORIZATION_CODE.toString())){
-                if(!oAuthService.checkAuthCode(authCode)){
+            if (oauthRequest.getParam(OAuth.OAUTH_GRANT_TYPE).equals(GrantType.AUTHORIZATION_CODE.toString())) {
+                if (!oAuthService.checkAuthCode(authCode)) {
                     OAuthResponse response = OAuthResponse
                             .errorResponse(HttpServletResponse.SC_BAD_REQUEST)
                             .setError(OAuthError.TokenResponse.INVALID_GRANT)
@@ -79,13 +79,13 @@ public class AccessTokenController {
             }
 
             // 生成Access Token
-            OAuthIssuerImpl oAuthIssuer = new OAuthIssuerImpl(new MD5Generator()) ;
+            OAuthIssuerImpl oAuthIssuer = new OAuthIssuerImpl(new MD5Generator());
             String accessToken = oAuthIssuer.accessToken();
-            log.info("服务器生成的accessToken="+accessToken);
-            oAuthService.addAccessToken(accessToken,oAuthService.getUsernameByAuthCode(authCode));
+            log.info("服务器生成的accessToken=" + accessToken);
+            oAuthService.addAccessToken(accessToken, oAuthService.getUsernameByAuthCode(authCode));
             // 移除code，每个code只能使用一次
             String username = oAuthService.removeAuthCode(authCode);
-            log.info("服务器移除auth_code="+authCode+" username="+username);
+            log.info("服务器移除auth_code=" + authCode + " username=" + username);
 
             // 生成OAuth响应
             OAuthResponse response = OAuthASResponse
@@ -95,15 +95,15 @@ public class AccessTokenController {
                     .buildJSONMessage();
 
             // 根据OAuthResponse 生成ResponseEntity
-            return new ResponseEntity(response.getBody(),HttpStatus.valueOf(response.getResponseStatus()));
+            return new ResponseEntity(response.getBody(), HttpStatus.valueOf(response.getResponseStatus()));
 
-        }catch (OAuthProblemException e){
-            log.error("获取accessToken发生异常e=",e);
+        } catch (OAuthProblemException e) {
+            log.error("获取accessToken发生异常e=", e);
             // 构建错误响应
             OAuthResponse response = OAuthASResponse
                     .errorResponse(HttpServletResponse.SC_BAD_REQUEST).error(e)
                     .buildJSONMessage();
-            return new ResponseEntity(response.getBody(),HttpStatus.valueOf(response.getResponseStatus()));
+            return new ResponseEntity(response.getBody(), HttpStatus.valueOf(response.getResponseStatus()));
         }
     }
 }

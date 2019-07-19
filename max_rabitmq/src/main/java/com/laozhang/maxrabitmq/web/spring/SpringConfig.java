@@ -11,6 +11,7 @@ import org.springframework.core.env.Environment;
 @Configuration
 public class SpringConfig {
     private Environment environment;
+
     @Autowired
     public void setEnvironment(Environment environment) {
         this.environment = environment;

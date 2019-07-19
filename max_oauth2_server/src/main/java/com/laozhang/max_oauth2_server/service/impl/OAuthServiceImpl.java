@@ -11,11 +11,11 @@ import java.util.Objects;
 
 /**
  * OAuth相关处理：authCode 添加/移除  accessToken的添加/移除 。。。。。
- * */
+ */
 @Service
 public class OAuthServiceImpl implements OAuthService {
 
-    private Cache<String,String> cache;
+    private Cache<String, String> cache;
 
     @Autowired
     ClientService clientService;
@@ -27,7 +27,7 @@ public class OAuthServiceImpl implements OAuthService {
 
     @Override
     public void addAuthCode(String authCode, String username) {
-        cache.put(authCode,username);
+        cache.put(authCode, username);
     }
 
     @Override
@@ -37,7 +37,7 @@ public class OAuthServiceImpl implements OAuthService {
 
     @Override
     public void addAccessToken(String accessToken, String username) {
-        cache.put(accessToken,username);
+        cache.put(accessToken, username);
     }
 
     @Override

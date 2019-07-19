@@ -10,19 +10,19 @@ public interface UserMapper {
 
     @Select("select * from users")
     @Results({
-            @Result(property = "userSex", column = "user_sex",javaType = UserSexEnum.class),
-            @Result(property = "nickName",column = "nick_name")
+            @Result(property = "userSex", column = "user_sex", javaType = UserSexEnum.class),
+            @Result(property = "nickName", column = "nick_name")
     })
     List<UserEntity> getAll();
 
     @Select("select * from users where id = #{id}")
     @Results({
-            @Result(property = "userSex", column = "user_sex",javaType = UserSexEnum.class),
-            @Result(property = "nickName",column = "nick_name")
+            @Result(property = "userSex", column = "user_sex", javaType = UserSexEnum.class),
+            @Result(property = "nickName", column = "nick_name")
     })
     UserEntity getOne(Long id);
 
-    @Options(useGeneratedKeys = true, keyProperty = "id",keyColumn = "id")
+    @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
     @Insert("INSERT INTO users(userName,passWord,user_sex,nick_name) VALUES(#{userName}, #{passWord}, #{userSex},#{nickName})")
     Long insert(UserEntity user);
 

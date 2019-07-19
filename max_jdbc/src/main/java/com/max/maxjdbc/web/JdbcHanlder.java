@@ -21,7 +21,7 @@ public class JdbcHanlder {
 
     public void batch(final Collection collection) {
         queue.drainTo(collection);
-        String sql="insert into book(name,pbYear) values(?,?)";
+        String sql = "insert into book(name,pbYear) values(?,?)";
         jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
             @Override
             public void setValues(PreparedStatement ps, int i) throws SQLException {

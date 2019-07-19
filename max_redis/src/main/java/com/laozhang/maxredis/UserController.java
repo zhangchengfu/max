@@ -15,7 +15,7 @@ public class UserController {
     @Cacheable(value = "user")
     @ResponseBody
     public User getUser() {
-        User user = new User("laozhang","123456");
+        User user = new User("laozhang", "123456");
         System.out.println("若下面没出现“无缓存的时候调用”字样且能打印出数据表示测试成功");
         return user;
     }
@@ -27,7 +27,7 @@ public class UserController {
         if (uid == null) {
             uid = UUID.randomUUID();
         }
-        session.setAttribute("uid",uid);
+        session.setAttribute("uid", uid);
         return session.getId();
     }
 }

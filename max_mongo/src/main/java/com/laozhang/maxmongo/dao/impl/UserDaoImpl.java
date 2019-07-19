@@ -31,9 +31,9 @@ public class UserDaoImpl implements UserDao {
     @Override
     public int updateUser(UserEntity user) {
         Query query = new Query(Criteria.where("id").is(user.getId()));
-        Update update = new Update().set("userName",user.getUserName()).set("passWord",user.getPassWord());
+        Update update = new Update().set("userName", user.getUserName()).set("passWord", user.getPassWord());
         //更新查询返回结果集的第一条
-        WriteResult result = mongoTemplate.updateFirst(query,update,UserEntity.class);
+        WriteResult result = mongoTemplate.updateFirst(query, update, UserEntity.class);
         if (result != null) {
             return result.getN();
         } else {
@@ -44,6 +44,6 @@ public class UserDaoImpl implements UserDao {
     @Override
     public void deleteUserById(Long id) {
         Query query = new Query(Criteria.where("id").is(id));
-        mongoTemplate.remove(query,UserEntity.class);
+        mongoTemplate.remove(query, UserEntity.class);
     }
 }

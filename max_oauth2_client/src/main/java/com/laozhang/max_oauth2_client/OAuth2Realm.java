@@ -42,7 +42,7 @@ public class OAuth2Realm extends AuthorizingRealm {
 
     /**
      * 身份认证
-     * */
+     */
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
         OAuth2Token oAuth2Token = (OAuth2Token) token;
@@ -66,11 +66,11 @@ public class OAuth2Realm extends AuthorizingRealm {
                     .setCode(code).setRedirectURI(redirectUrl)
                     .buildQueryMessage();
             //获取 access token
-            log.info("clientId="+clientId+"   clientsecret="+clientSecret);
+            log.info("clientId=" + clientId + "   clientsecret=" + clientSecret);
             OAuthAccessTokenResponse oAuthResponse =
                     oAuthClient.accessToken(accessTokenRequest, OAuth.HttpMethod.POST);
             String accessToken = oAuthResponse.getAccessToken();
-            log.info("客户端Realm中获取到accessToken="+accessToken);
+            log.info("客户端Realm中获取到accessToken=" + accessToken);
             Long expiresIn = oAuthResponse.getExpiresIn(); // 获取过期时间，此处暂时没用到
             //获取 user info
             OAuthClientRequest userInfoRequest =
@@ -81,7 +81,7 @@ public class OAuth2Realm extends AuthorizingRealm {
             String username = resourceResponse.getBody();
             return username;
         } catch (Exception e) {
-            log.info("获取用户名发生异常e=",e);
+            log.info("获取用户名发生异常e=", e);
             throw new OAuth2AuthenticationException(e);
         }
     }

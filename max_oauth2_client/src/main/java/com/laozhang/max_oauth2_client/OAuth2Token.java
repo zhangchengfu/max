@@ -5,7 +5,7 @@ import org.apache.shiro.authc.AuthenticationToken;
 
 /**
  * 用于存储 oauth2 服务端返回的 auth code
- * */
+ */
 @Data
 public class OAuth2Token implements AuthenticationToken {
 

@@ -33,7 +33,7 @@ public class RoleResourcesServiceImpl implements RoleResourcesService {
 
     @Override
     public int update(RoleResourcesKey entity) {
-        return roleResourcesMapper.updateByExample(entity,new RoleResourcesCriteria());
+        return roleResourcesMapper.updateByExample(entity, new RoleResourcesCriteria());
     }
 
     @Override

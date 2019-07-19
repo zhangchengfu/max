@@ -11,7 +11,7 @@ public interface ResourcesService extends IService<Resources> {
 
     public List<Resources> queryAll();
 
-    public List<Resources> loadUserResources(Map<String,Object> map);
+    public List<Resources> loadUserResources(Map<String, Object> map);
 
     public List<Resources> queryResourcesListWithSelected(Integer rid);
 }

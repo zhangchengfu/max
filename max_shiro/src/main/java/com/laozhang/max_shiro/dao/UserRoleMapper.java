@@ -2,7 +2,9 @@ package com.laozhang.max_shiro.dao;
 
 import com.laozhang.max_shiro.entity.UserRole;
 import com.laozhang.max_shiro.entity.UserRoleCriteria;
+
 import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 
 public interface UserRoleMapper {

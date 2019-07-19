@@ -39,7 +39,7 @@ public class MaxRabitmqApplicationTests {
             String message = "Hello World RabbitMQ count:" + i;
 
             //发布消息，第一个参数表示路由（Exchange名称），未""则表示使用默认消息路由
-            channel.basicPublish("",QUEUE_NAME, null, message.getBytes());
+            channel.basicPublish("", QUEUE_NAME, null, message.getBytes());
 
             System.out.println(" [x] Sent '" + message + "'");
         }
@@ -50,7 +50,7 @@ public class MaxRabitmqApplicationTests {
     }
 
     @Test
-    public void consumer() throws IOException,InterruptedException,TimeoutException {
+    public void consumer() throws IOException, InterruptedException, TimeoutException {
         //创建连接工厂
         ConnectionFactory factory = new ConnectionFactory();
         factory.setHost("127.0.0.1");

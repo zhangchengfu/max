@@ -5,9 +5,10 @@ import java.util.concurrent.TimeoutException;
 
 public class DirectConsumer {
     private static final String exchangeName = "direct.exchange";
+
     public void msgConsumer(String queueName, String routingKey) {
         try {
-            MsgConsumer.consumeMsg(exchangeName,queueName,routingKey);
+            MsgConsumer.consumeMsg(exchangeName, queueName, routingKey);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (TimeoutException e) {

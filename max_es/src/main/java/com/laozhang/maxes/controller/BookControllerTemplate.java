@@ -28,14 +28,14 @@ public class BookControllerTemplate {
     private ElasticsearchTemplate elasticsearchTemplate;
 
     @GetMapping("/all")
-    public List<Map<String,Object>> searchAll() throws Exception {
+    public List<Map<String, Object>> searchAll() throws Exception {
         Client client = elasticsearchTemplate.getClient();
         SearchRequestBuilder srb = client.prepareSearch("product").setTypes("book");
         SearchResponse sr = srb.setQuery(QueryBuilders.matchAllQuery()).execute().actionGet();
         SearchHits hits = sr.getHits();
-        List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();
+        List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
         for (SearchHit hit : hits) {
-            Map<String,Object> source = hit.getSource();
+            Map<String, Object> source = hit.getSource();
             list.add(source);
             System.out.println(hit.getSourceAsString());
         }

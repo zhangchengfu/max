@@ -32,10 +32,10 @@ public class UserInfoController {
 
     /**
      * 客户端根据code可获取user信息，这里只返回username
-     * */
+     */
     @RequestMapping("/userInfo")
     public HttpEntity userInfo(HttpServletRequest request) throws OAuthSystemException {
-        try{
+        try {
             //构建 OAuth2 资源请求
             OAuthAccessResourceRequest oauthRequest = new OAuthAccessResourceRequest(request, ParameterStyle.QUERY);
 
@@ -43,8 +43,8 @@ public class UserInfoController {
             String accessToken = oauthRequest.getAccessToken();
 
             // 验证Access Token
-            if(!oAuthService.checkAccessToken(accessToken)){
-                log.info("accessToken 已过期  accessToken="+accessToken);
+            if (!oAuthService.checkAccessToken(accessToken)) {
+                log.info("accessToken 已过期  accessToken=" + accessToken);
                 // 不存在（过期），则返回未验证，需重新验证
                 OAuthResponse oauthResponse = OAuthRSResponse
                         .errorResponse(HttpServletResponse.SC_UNAUTHORIZED)
@@ -53,24 +53,24 @@ public class UserInfoController {
                         .buildHeaderMessage();
 
                 HttpHeaders headers = new HttpHeaders();
-                headers.add(OAuth.HeaderType.WWW_AUTHENTICATE,oauthResponse.getHeader(OAuth.HeaderType.WWW_AUTHENTICATE));
+                headers.add(OAuth.HeaderType.WWW_AUTHENTICATE, oauthResponse.getHeader(OAuth.HeaderType.WWW_AUTHENTICATE));
 
                 return new ResponseEntity(headers, HttpStatus.UNAUTHORIZED);
             }
 
             // 返回用户名
             String username = oAuthService.getUsernameByAccessToken(accessToken);
-            return new ResponseEntity(username,HttpStatus.OK);
-        }catch (OAuthProblemException e){
+            return new ResponseEntity(username, HttpStatus.OK);
+        } catch (OAuthProblemException e) {
             // 检查是否设置了错误码
             String errorCode = e.getError();
-            if(OAuthUtils.isEmpty(errorCode)){
+            if (OAuthUtils.isEmpty(errorCode)) {
                 OAuthResponse oauthResponse = OAuthRSResponse
                         .errorResponse(HttpServletResponse.SC_UNAUTHORIZED)
                         .setRealm(Constants.RESOURCE_SERVER_NAME)
                         .buildHeaderMessage();
                 HttpHeaders headers = new HttpHeaders();
-                headers.add(OAuth.HeaderType.WWW_AUTHENTICATE,oauthResponse.getHeader(OAuth.HeaderType.WWW_AUTHENTICATE));
+                headers.add(OAuth.HeaderType.WWW_AUTHENTICATE, oauthResponse.getHeader(OAuth.HeaderType.WWW_AUTHENTICATE));
 
                 return new ResponseEntity(headers, HttpStatus.UNAUTHORIZED);
             }

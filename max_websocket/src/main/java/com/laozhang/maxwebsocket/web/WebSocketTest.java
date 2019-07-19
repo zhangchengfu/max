@@ -29,6 +29,7 @@ public class WebSocketTest {
 
     /**
      * 连接建立成功调用的方法
+     *
      * @param session 可选的参数，session为与某个客户端的连接会话，需要通过它给客户端发送数据
      */
     @OnOpen
@@ -45,6 +46,7 @@ public class WebSocketTest {
 
     /**
      * 连接关闭调用的方法
+     *
      * @param closeSession
      */
     @OnClose
@@ -75,7 +77,7 @@ public class WebSocketTest {
                 WebSocketTest item = (WebSocketTest) websocketMap.get(mySession);
                 try {
                     String msg = "hi,这是返回的信息";
-                    item.sendMessage(mySession,msg);
+                    item.sendMessage(mySession, msg);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -85,6 +87,7 @@ public class WebSocketTest {
 
     /**
      * 发生错误时调用
+     *
      * @param session
      * @param error
      */
@@ -100,7 +103,7 @@ public class WebSocketTest {
 
     //定向发送信息
     public void sendMessage(Session mySession, String message) throws IOException {
-        synchronized(this) {
+        synchronized (this) {
             try {
                 //该session如果已被删除，则不执行发送请求
                 if (mySession.isOpen()) {

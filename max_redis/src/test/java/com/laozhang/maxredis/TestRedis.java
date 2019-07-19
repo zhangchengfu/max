@@ -24,17 +24,17 @@ public class TestRedis {
 
     @Test
     public void test() {
-        stringRedisTemplate.opsForValue().set("aaa","111");
-        Assert.assertEquals("111",stringRedisTemplate.opsForValue().get("aaa"));
+        stringRedisTemplate.opsForValue().set("aaa", "111");
+        Assert.assertEquals("111", stringRedisTemplate.opsForValue().get("aaa"));
         System.out.println(stringRedisTemplate.opsForValue().get("aaa"));
     }
 
     @Test
-    public void testObject() throws Exception{
-        User user = new User("laozhang","123456");
-        ValueOperations<String,User> operations = redisTemplate.opsForValue();
-        operations.set("user1",user);
-        operations.set("user2",user,1,TimeUnit.SECONDS);
+    public void testObject() throws Exception {
+        User user = new User("laozhang", "123456");
+        ValueOperations<String, User> operations = redisTemplate.opsForValue();
+        operations.set("user1", user);
+        operations.set("user2", user, 1, TimeUnit.SECONDS);
         Thread.sleep(1000);
         //redisTemplate.delete("user2");
         boolean exists = redisTemplate.hasKey("user2");

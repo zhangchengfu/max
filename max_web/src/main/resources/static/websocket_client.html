@@ -17,9 +17,11 @@
     <script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     <title>webSocket测试</title>
     <script type="text/javascript">
-        $(function(){
+        $(function () {
             var websocket;
-            var user="<%=request.getSession().getAttribute("user")%>";
+            var user = "<%=request.getSession().getAttribute("
+            user
+            ")%>";
             if ('WebSocket' in window) {
                 websocket = new WebSocket("ws://127.0.0.1:9000/websocket");
             } else if ('MozWebSocket' in window) {
@@ -27,7 +29,7 @@
             } else {
                 websocket = new SockJS("http://127.0.0.1:9000/websocket");
                 stompClient = Stomp.over(websocket);
-                stompClient.connect({}, function(frame) {
+                stompClient.connect({}, function (frame) {
                     setConnected(true);
                 });
             }
@@ -40,28 +42,29 @@
             var stompClient = Stomp.over(websocket);
             //当有消息时，会自动调用此方法
             websocket.onmessage = function (evnt) {
-                $("#msg").html($("#msg").html()+ "<br/>" + evnt.data);
+                $("#msg").html($("#msg").html() + "<br/>" + evnt.data);
             };
             websocket.onerror = function (evnt) {
             };
             websocket.onclose = function (evnt) {
                 $("#tou").html("与服务器断开了链接!")
             }
-            $('#send').bind('click', function() {
+            $('#send').bind('click', function () {
                 send();
             });
-            function send(){
+
+            function send() {
                 debugger;
                 if (websocket != null) {
                     var message = document.getElementById('message').value;
-                    websocket.send("{\"toname\":\"all\",\"message\":\""+message+"\,\"user\":\""+user+"\"}");
+                    websocket.send("{\"toname\":\"all\",\"message\":\"" + message + "\,\"user\":\"" + user + "\"}");
                 } else {
                     alert('未与服务器链接.');
                 }
             }
 
             //强制关闭浏览器断开连接
-            window.onbeforeunload = function() {
+            window.onbeforeunload = function () {
                 if (stompClient != null) {
                     stompClient.disconnect();
                 }
@@ -82,7 +85,7 @@
     <div class="input-group">
         <input type="text" class="form-control" placeholder="发送信息..." id="message">
         <span class="input-group-btn">
-        <button class="btn btn-default" type="button" id="send" >发送</button>
+        <button class="btn btn-default" type="button" id="send">发送</button>
       </span>
     </div><!-- /input-group -->
 </div><!-- /.col-lg-6 -->
