@@ -1,12 +1,17 @@
 package com.laozhang.max_oauth2_client.config;
 
+import com.laozhang.max_oauth2_client.MyCredentialsMatcher;
 import com.laozhang.max_oauth2_client.OAuth2AuthenticationFilter;
 import com.laozhang.max_oauth2_client.OAuth2Realm;
 import lombok.Data;
 import org.apache.oltu.oauth2.common.OAuth;
 import org.apache.shiro.cache.ehcache.EhCacheManager;
+import org.apache.shiro.codec.Base64;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
+import org.apache.shiro.web.mgt.CookieRememberMeManager;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.apache.shiro.web.servlet.Cookie;
+import org.apache.shiro.web.servlet.SimpleCookie;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -61,6 +66,9 @@ public class ShiroClientConfig {
         oAuth2Realm.setAccessTokenUrl(accessTokenUrl);
         oAuth2Realm.setUserInfoUrl(userInfoUrl);
         oAuth2Realm.setRedirectUrl(redirectUrl);
+        MyCredentialsMatcher myCredentialsMatcher = new MyCredentialsMatcher();
+        myCredentialsMatcher.setStoredCredentialsHexEncoded(false);
+        oAuth2Realm.setCredentialsMatcher(myCredentialsMatcher);
         return oAuth2Realm;
     }
 
@@ -81,7 +89,7 @@ public class ShiroClientConfig {
         shiroFilter.setSecurityManager(createSecurityManager());
         shiroFilter.setLoginUrl(authorizeUrl + "?client_id=" + clientId + "&response_type=" + OAuth.OAUTH_CODE +
                 "&redirect_uri=" + redirectUrl);
-        shiroFilter.setSuccessUrl("/oauth2-login");
+        shiroFilter.setSuccessUrl("/oauth2-success");
         shiroFilter.setFilters(createFilterChainMap());
         shiroFilter.setFilterChainDefinitions(loadFilterChainDefinitions());
         return shiroFilter;
@@ -92,8 +100,23 @@ public class ShiroClientConfig {
         DefaultWebSecurityManager securityMananger = new DefaultWebSecurityManager();
         securityMananger.setRealm(getUserAuthcRealm());
         securityMananger.setCacheManager(createEhcacheManager());
-        // securityMananger.setRememberMeManager(createCookieRemmberMananger());
+        //securityMananger.setRememberMeManager(cookieRememberMeManager());
         return securityMananger;
+    }
+
+    @Bean
+    public CookieRememberMeManager cookieRememberMeManager() {
+        CookieRememberMeManager cookieRememberMeManager = new CookieRememberMeManager();
+        cookieRememberMeManager.setCipherKey(Base64.decode("6ZmI6I2j3Y+R1aSn5BOlAA=="));
+        cookieRememberMeManager.setCookie(cookie());
+        return cookieRememberMeManager;
+    }
+
+    @Bean
+    public Cookie cookie() {
+        SimpleCookie simpleCookie = new SimpleCookie("rememberMe");
+        simpleCookie.setPath("/");
+        return  simpleCookie;
     }
 
     @Bean(name = "cacheManager")
