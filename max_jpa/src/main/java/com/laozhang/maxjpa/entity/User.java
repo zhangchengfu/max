@@ -48,4 +48,11 @@ public class User {
     public void setAge(int age) {
         this.age = age;
     }
+
+    public User(long id, String userName, String password, int age) {
+        this.id = id;
+        this.userName = userName;
+        this.password = password;
+        this.age = age;
+    }
 }
