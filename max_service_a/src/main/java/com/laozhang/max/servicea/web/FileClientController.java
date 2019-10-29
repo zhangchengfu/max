@@ -141,7 +141,7 @@ public class FileClientController {
             try {
                 // http请求，下载文件
                 List<NameValuePair> pairs = new ArrayList<NameValuePair>();
-                pairs.add(new BasicNameValuePair("attachmentId",.toString()));
+                pairs.add(new BasicNameValuePair("attachmentId",attachmentId.toString()));
                 URIBuilder builder = new URIBuilder(url);
                 builder.setParameters(pairs);
                 HttpGet get = new HttpGet(builder.build());
