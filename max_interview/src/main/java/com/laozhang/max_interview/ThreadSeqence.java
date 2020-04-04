@@ -1,5 +1,8 @@
 package com.laozhang.max_interview;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -7,7 +10,9 @@ import java.util.concurrent.Executors;
  * 线程按顺序执行
  */
 public class ThreadSeqence {
+    public static final Logger logger = LoggerFactory.getLogger(ThreadSeqence.class);
     public static void main(String[] args) {
+        logger.info("开始执行");
         final Thread t1 = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -62,5 +67,6 @@ public class ThreadSeqence {
         executor.submit(t4);
         executor.submit(t5);
         executor.submit(t6);
+        logger.error("执行结束");
     }
 }
