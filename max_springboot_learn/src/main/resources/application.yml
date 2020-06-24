@@ -1,0 +1,34 @@
+server:
+  port: 8080
+
+
+foo:
+  id: 1
+  name: test
+  date: 2020/04/01
+  list:
+    - one
+    - two
+
+spring:
+  profiles:
+    active: dev
+
+---
+
+spring:
+  profiles: dev
+  http:
+    encoding:
+      charset: UTF-8
+  rabbitmq:
+    host: localhost
+    username: guest
+    password: guest
+foo:
+  id: 1
+  name: test2
+  date: 2020/04/01
+  list:
+    - one
+    - two
