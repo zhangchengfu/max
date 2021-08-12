@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class RedisLockController {
 
     @Autowired
-    private RedisLock redisLock;
+    private RedisLock2 redisLock;
 
     @ResponseBody
     @RequestMapping("test")

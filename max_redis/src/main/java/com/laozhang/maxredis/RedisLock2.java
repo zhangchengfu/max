@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import java.util.concurrent.TimeUnit;
 
 @Component
-public class RedisLock {
+public class RedisLock2 {
 
     Logger logger = LoggerFactory.getLogger(getClass());
 

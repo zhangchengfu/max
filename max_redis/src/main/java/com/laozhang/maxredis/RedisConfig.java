@@ -3,28 +3,22 @@ package com.laozhang.maxredis;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.cache.annotation.EnableCaching;
-import org.springframework.cache.interceptor.KeyGenerator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.cache.RedisCacheManager;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
-import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
-import redis.clients.jedis.JedisPoolConfig;
-
-import java.lang.reflect.Method;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 @Configuration
 @EnableCaching
 public class RedisConfig extends CachingConfigurerSupport {
 
-    @Value("${redis.maxIdle}")
+    /*@Value("${redis.maxIdle}")
     private Integer maxIdle;
 
     @Value("${redis.maxTotal}")
@@ -46,9 +40,9 @@ public class RedisConfig extends CachingConfigurerSupport {
     private boolean testOnBorrow;
 
     @Value("${redis.testWhileIdle}")
-    private boolean testWhileIdle;
+    private boolean testWhileIdle;*/
 
-    @Bean
+    /*@Bean
     public JedisPoolConfig jedisPoolConfig() {
         JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
         // 最大空闲数
@@ -68,9 +62,9 @@ public class RedisConfig extends CachingConfigurerSupport {
         // 在空闲时检查有效性, 默认false
         jedisPoolConfig.setTestWhileIdle(testWhileIdle);
         return jedisPoolConfig;
-    }
+    }*/
 
-    @Bean
+    /*@Bean
     public KeyGenerator keyGenerator() {
         return new KeyGenerator() {
             @Override
@@ -84,9 +78,9 @@ public class RedisConfig extends CachingConfigurerSupport {
                 return sb.toString();
             }
         };
-    }
+    }*/
 
-    @Bean
+   /* @Bean
     public JedisConnectionFactory JedisConnectionFactory(JedisPoolConfig jedisPoolConfig) {
         JedisConnectionFactory JedisConnectionFactory = new JedisConnectionFactory(jedisPoolConfig);
         //连接池
@@ -100,17 +94,17 @@ public class RedisConfig extends CachingConfigurerSupport {
         //客户端超时时间单位是毫秒
         JedisConnectionFactory.setTimeout(5000);
         return JedisConnectionFactory;
-    }
+    }*/
 
-    @Bean
+    /*@Bean
     public CacheManager cacheManager(RedisTemplate redisTemplate) {
         RedisCacheManager rcm = new RedisCacheManager(redisTemplate);
         // 设置缓存过期时间
 //        rcm.setDefaultExpiration(60);//秒
         return rcm;
-    }
+    }*/
 
-    @Bean
+    /*@Bean
     public RedisTemplate<String, String> redisTemplate(RedisConnectionFactory factory) {
         StringRedisTemplate template = new StringRedisTemplate(factory);
         Jackson2JsonRedisSerializer jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer(Object.class);
@@ -121,5 +115,43 @@ public class RedisConfig extends CachingConfigurerSupport {
         template.setValueSerializer(jackson2JsonRedisSerializer);
         template.afterPropertiesSet();
         return template;
+    }*/
+
+    /**
+     * redisTemplate 序列化使用的jdkSerializeable, 存储二进制字节码, 所以自定义序列化类
+     *
+     * @param redisConnectionFactory
+     * @return
+     */
+    @Bean
+    public RedisTemplate<Object, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
+        RedisTemplate<Object, Object> redisTemplate = new RedisTemplate<>();
+        redisTemplate.setConnectionFactory(redisConnectionFactory);
+
+        // 使用Jackson2JsonRedisSerialize 替换默认序列化
+        Jackson2JsonRedisSerializer jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer(Object.class);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
+        jackson2JsonRedisSerializer.setObjectMapper(objectMapper);
+
+        // 设置key和value的序列化规则
+        redisTemplate.setValueSerializer(jackson2JsonRedisSerializer);
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
+
+        redisTemplate.setHashKeySerializer(new StringRedisSerializer());
+        redisTemplate.setHashValueSerializer(jackson2JsonRedisSerializer);
+
+        redisTemplate.afterPropertiesSet();
+        return redisTemplate;
+    }
+
+    @Bean
+    public DefaultRedisScript<Long> stockScript() {
+        DefaultRedisScript<Long> redisScript = new DefaultRedisScript<>();
+        //放在和application.yml 同层目录下
+        redisScript.setLocation(new ClassPathResource("stock.lua"));
+        redisScript.setResultType(Long.class);
+        return redisScript;
     }
 }
