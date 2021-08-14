@@ -1,5 +1,6 @@
 package com.laozhang.maxredis;
 
+import com.laozhang.maxredis.constants.RedisKeyConstant;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,12 +11,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -108,4 +111,40 @@ public class TestRedis {
         System.out.println(dinerIds);
 
     }
+
+    /**
+     * 增加有序集合
+     */
+    @Test
+    public void addZset() {
+
+        for (int i = 0; i < 40; i++) {
+            redisTemplate.opsForZSet().incrementScore(
+                    RedisKeyConstant.diner_points.getKey(), "user"+i, new Random().nextInt(100));
+        }
+    }
+
+    /**
+     * Top 20
+     */
+    @Test
+    public void top20() {
+
+        Set<ZSetOperations.TypedTuple<String>> rangeWithScores = redisTemplate.opsForZSet().reverseRangeWithScores(
+                RedisKeyConstant.diner_points.getKey(), 0, 19);
+        int rank = 1;
+        for (ZSetOperations.TypedTuple<String> rangeWithScore : rangeWithScores) {
+            // iD
+            String id = rangeWithScore.getValue();
+            // 积分
+            int points = rangeWithScore.getScore().intValue();
+            System.out.println("排名：" + (rank++) + "\t" + "id:" + id + "\t" + "积分:" + points);
+        }
+
+        // 获取排名
+        Long myRank = redisTemplate.opsForZSet().reverseRank(
+                RedisKeyConstant.diner_points.getKey(), "user27");
+        System.out.println("排名：" + (myRank + 1));
+    }
+
 }
