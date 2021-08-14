@@ -3,13 +3,20 @@ package com.laozhang.maxredis;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 @RunWith(SpringRunner.class)
@@ -21,6 +28,39 @@ public class TestRedis {
 
     @Autowired
     private RedisTemplate redisTemplate;
+
+    @Resource
+    private RedissonClient redissonClient;
+
+    @Resource
+    private DefaultRedisScript defaultRedisScript;
+
+    // 分布式锁获取、解锁
+    @Test
+    public void testRedission() throws Exception {
+
+        RLock lock = redissonClient.getLock("abc");
+        try {
+            boolean isLocked = lock.tryLock(10L, TimeUnit.SECONDS);
+            if (isLocked) {
+                System.out.println("获取到锁");
+
+                // redis扣库存
+                // hset stock amount 2
+                // hset stock amount
+                List<String> keys = new ArrayList<>();
+                keys.add("stock");
+                keys.add("amount");
+                Long amount = (Long) redisTemplate.execute(defaultRedisScript, keys);
+                System.out.println("amout:" + amount);
+            }
+        } finally {
+            if (lock.isLocked()) {
+                System.out.println("解锁");
+                lock.unlock();
+            }
+        }
+    }
 
     @Test
     public void test() {
@@ -43,5 +83,29 @@ public class TestRedis {
         } else {
             System.out.println("exists is false");
         }
+    }
+
+    /**
+     * 操作集合
+     *
+     * 添加数据
+     * sadd user:1 1 2 3 4
+     * smembers user:1
+     * sadd user:2 3 4 5 6
+     * smembers user:2
+     * sinter user:1 user:2
+     *
+     */
+    @Test
+    public void handleSet() {
+
+        // 增加
+        redisTemplate.opsForSet().add("user:1", 7);
+        // 取交集
+        Set<Integer> dinerIds = redisTemplate.opsForSet().intersect("user:1", "user:2");
+        // 删除
+        redisTemplate.opsForSet().remove("user:1", 7);
+        System.out.println(dinerIds);
+
     }
 }

@@ -1,6 +1,5 @@
 package com.laozhang.maxredis;
 
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -12,7 +11,7 @@ import java.util.UUID;
 public class UserController {
 
     @RequestMapping("/getUser")
-    @Cacheable(value = "user")
+    //@Cacheable(value = "user")
     @ResponseBody
     public User getUser() {
         User user = new User("laozhang", "123456");
