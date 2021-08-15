@@ -8,10 +8,8 @@ import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
-import org.springframework.data.redis.core.ZSetOperations;
+import org.springframework.data.redis.connection.BitFieldSubCommands;
+import org.springframework.data.redis.core.*;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -147,4 +145,51 @@ public class TestRedis {
         System.out.println("排名：" + (myRank + 1));
     }
 
+    // BitMaps
+    // 业务场景类似于签到
+    /**
+     * 签到
+     */
+    @Test
+    public void sign() {
+
+        String signKey = "user:sign:5:202108";
+        // 查看是否已签到
+        //boolean isSigned = redisTemplate.opsForValue().getBit(signKey, offset);
+        for (int i = 0; i < 31; i++) {
+            // 签到
+            if (i % 3 == 0)
+                redisTemplate.opsForValue().setBit(signKey, i, true);
+        }
+    }
+
+    /**
+     * 统计签到次数
+     */
+    @Test
+    public void getSignCount() {
+
+        Long count = (Long) redisTemplate.execute(
+                (RedisCallback<Long>) con -> con.bitCount("user:sign:5:202108".getBytes()));
+        System.out.println("count:" + count);
+
+        BitFieldSubCommands bitFieldSubCommands = BitFieldSubCommands.create()
+                .get(BitFieldSubCommands.BitFieldType.unsigned(31))
+                .valueAt(0);
+        List<Long> list = redisTemplate.opsForValue().bitField("user:sign:5:202108", bitFieldSubCommands);
+        long v = list.get(0) == null ? 0 : list.get(0);
+        int signCount = 0;
+        for (int i = 31; i > 0; i--) {// i 表示位移操作次数
+            // 右移再左移，如果等于自己说明最低位是 0，表示未签到
+            if (v >> 1 << 1 == v) {
+
+            } else {
+                System.out.println("天数：" + i + "签到");
+                signCount++;
+            }
+            // 右移一位并重新赋值，相当于把最低位丢弃一位
+            v >>= 1;
+        }
+        System.out.println("signcount:" + signCount);
+    }
 }
