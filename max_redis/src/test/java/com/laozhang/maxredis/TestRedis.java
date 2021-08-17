@@ -8,7 +8,12 @@ import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.geo.Circle;
+import org.springframework.data.geo.Distance;
+import org.springframework.data.geo.GeoResults;
+import org.springframework.data.geo.Point;
 import org.springframework.data.redis.connection.BitFieldSubCommands;
+import org.springframework.data.redis.connection.RedisGeoCommands;
 import org.springframework.data.redis.core.*;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -191,5 +196,45 @@ public class TestRedis {
             v >>= 1;
         }
         System.out.println("signcount:" + signCount);
+    }
+
+    // 经纬度
+    /**
+     * 更新经纬度
+     */
+    @Test
+    public void updateLocation() {
+
+        // 获取 key diner:location
+        String key = RedisKeyConstant.diner_location.getKey();
+        // 将用户地理位置信息存入 Redis
+        RedisGeoCommands.GeoLocation geoLocation = new RedisGeoCommands
+                .GeoLocation("zhangsan", new Point(121.446617, 31.205593));
+        redisTemplate.opsForGeo().add(key, geoLocation);
+    }
+
+    /**
+     * 查询最近的人
+     */
+    @Test
+    public void findNearMe() {
+
+        // 如果经纬度没传，那么从 Redis 中获取
+        List<Point> points = redisTemplate.opsForGeo().position(RedisKeyConstant.diner_location.getKey(), "zhangsan");
+
+        // 初始化距离对象，单位 m
+        Distance distance = new Distance(1000,
+                RedisGeoCommands.DistanceUnit.METERS);
+        // 初始化 Geo 命令参数对象
+        RedisGeoCommands.GeoRadiusCommandArgs args =
+                RedisGeoCommands.GeoRadiusCommandArgs.newGeoRadiusArgs();
+        // 附近的人限制 20，包含距离，按由近到远排序
+        args.limit(20).includeDistance().sortAscending();
+        // 以用户经纬度为圆心，范围 1000m
+        Point point = new Point(121.446617, 30.205593);
+        Circle circle = new Circle(point, distance);
+        // 获取附近的人 GeoLocation 信息
+        GeoResults<RedisGeoCommands.GeoLocation> geoResult =
+                redisTemplate.opsForGeo().radius(RedisKeyConstant.diner_location.getKey(), circle, args);
     }
 }
