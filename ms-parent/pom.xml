@@ -14,6 +14,8 @@
     <version>0.0.1-SNAPSHOT</version>
     <modules>
         <module>ms-registry</module>
+        <module>ms-gateway</module>
+        <module>ms-diners</module>
     </modules>
     <packaging>pom</packaging>
 
