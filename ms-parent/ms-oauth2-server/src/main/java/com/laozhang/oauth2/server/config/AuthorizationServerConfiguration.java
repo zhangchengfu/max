@@ -14,6 +14,7 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
 
 import javax.annotation.Resource;
+import javax.sql.DataSource;
 import java.util.LinkedHashMap;
 
 /**
@@ -38,7 +39,8 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
     // 登录校验
     @Resource
     private UserService userService;
-
+    @Resource
+    private DataSource dataSource;
 
     /**
      * 配置令牌端点安全约束
@@ -62,12 +64,13 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
      */
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-        clients.inMemory().withClient(clientOAuth2DataConfiguration.getClientId()) // 客户端标识 ID
+        clients.jdbc(dataSource);
+        /*clients.inMemory().withClient(clientOAuth2DataConfiguration.getClientId()) // 客户端标识 ID
                 .secret(passwordEncoder.encode(clientOAuth2DataConfiguration.getSecret())) // 客户端安全码
                 .authorizedGrantTypes(clientOAuth2DataConfiguration.getGrantTypes()) // 授权类型
                 .accessTokenValiditySeconds(clientOAuth2DataConfiguration.getTokenValidityTime()) // token 有效期
                 .refreshTokenValiditySeconds(clientOAuth2DataConfiguration.getRefreshTokenValidityTime()) // 刷新 token 的有效期
-                .scopes(clientOAuth2DataConfiguration.getScopes()); // 客户端访问范围
+                .scopes(clientOAuth2DataConfiguration.getScopes()); // 客户端访问范围*/
     }
 
     /**
