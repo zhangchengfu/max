@@ -1,6 +1,7 @@
 package com.laozhang.oauth2.server.config;
 
 import cn.hutool.crypto.digest.DigestUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -10,6 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.annotation.Resource;
 
@@ -19,6 +21,12 @@ import javax.annotation.Resource;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    MySuccessHandler mySuccessHandler;
+
+    @Autowired
+    MyFailureHandler myFailureHandler;
 
     // 注入 Redis 连接工厂
     @Resource
@@ -66,13 +74,28 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
+    @Bean
+    public MyAuthenticationFilter myAuthenticationFilter() {
+
+        MyAuthenticationFilter filter = new MyAuthenticationFilter();
+        filter.setAuthenticationSuccessHandler(mySuccessHandler);
+        filter.setAuthenticationFailureHandler(myFailureHandler);
+        try {
+            filter.setAuthenticationManager(authenticationManagerBean());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return filter;
+    }
+
     // 放行和认证规则
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
+                .addFilterAt(myAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
                 // 放行的请求
-                .antMatchers("/oauth/**", "/actuator/**").permitAll()
+                .antMatchers("/oauth/**", "/actuator/**","/login").permitAll()
                 .and()
                 .authorizeRequests()
                 // 其他请求必须认证才能访问
