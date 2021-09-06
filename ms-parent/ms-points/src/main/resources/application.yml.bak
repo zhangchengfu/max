@@ -5,17 +5,17 @@ spring:
   application:
     name: ms-points # 应用名
   # 数据库
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    username: root
-    password: 123456
-    url: jdbc:mysql://127.0.0.1:3306/db_imooc?serverTimezone=Asia/Shanghai&characterEncoding=utf8&useUnicode=true&useSSL=false
+#  datasource:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    username: root
+#    password: taobang
+#    url: jdbc:mysql://127.0.0.1:3306/ds0?serverTimezone=Asia/Shanghai&characterEncoding=utf8&useUnicode=true&useSSL=false
   # Redis
   redis:
     port: 6379
     host: localhost
     timeout: 3000
-    password: 123456
+    password:
   # Swagger
   swagger:
     base-package: com.laozhang.points
@@ -36,9 +36,9 @@ service:
     ms-oauth-server: http://ms-oauth2-server/
     ms-diners-server: http://ms-diners/
 
-mybatis:
-  configuration:
-    map-underscore-to-camel-case: true # 开启驼峰映射
+#mybatis:
+#  configuration:
+#    map-underscore-to-camel-case: true # 开启驼峰映射
 
 logging:
   pattern:
