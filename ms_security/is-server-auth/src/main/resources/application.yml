@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: auth-server
+  datasource:
+    url: jdbc:mysql://localhost:3306/is-security?characterEncoding=utf8&characterSetResults=utf8&autoReconnect=true
+    username: root
+    password: taobang
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+server:
+  port: 9090
+  servlet:
+    session:
+      timeout: 2592000
